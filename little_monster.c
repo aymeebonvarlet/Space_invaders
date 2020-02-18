@@ -1,9 +1,11 @@
 #include "vt100.h"
 #include "big_monsters.h"
+#include "constants.h"
 
-uint8_t** coordonnees_littlem(uint8_t i,uint8_t coo){
-	x += i*10; //10 est la distance en x entre chaque little_monster
-	y=9; // on initialise y à 3
+uint8_t** coordonnees_littlem(uint8_t i,uint8_t coo, uint8_t ** x, uint8_t ** y){
+	uint8_t x=0;
+	x+= i*10; //10 est la distance en x entre chaque little_monster
+	uint8_t y=9; // on initialise y à 3
 	if (x==0){ //pour commencer après le contour
 		x=1;
 	}
@@ -12,15 +14,15 @@ uint8_t** coordonnees_littlem(uint8_t i,uint8_t coo){
 		y+=3;
 	}
 	if (x<80){
-		lmonster.tab[i][0]=x;
-		lmonster.tab[i][1]=y;
+		tab_littlem[i][0]=x;
+		tab_littlem[i][1]=y;
 	}
 	else {
 		x += i*10 - 80; // max x= 80
-		lmonster.tab[i][0]=x;
-		lmonster.tab[i][1]=y+3; //on ajoute 3 en y pour avoir une séparation
+		tab_littlem[i][0]=x;
+		tab_littlem[i][1]=y+3; //on ajoute 3 en y pour avoir une séparation
 	}
-	return lmonster.tab[i][coo];
+	return tab_littlem[i][coo];
 }
 
 void init_littlem(){
@@ -43,8 +45,11 @@ void delete_onelm(uint8_t id){
 
 void changed_lm(uint8_t pas){
 	for (uint8_t i = 0 ; i<15 ; i++){
-		bmonster.tab[i][0] += pas ; // on ajoute un à la coordonnées en x
+		tab_littlem[i][0] += pas ; // on ajoute un à la coordonnées en x
 		vt100_move(coordonnees_bigm(i,0),coordonnees_bigm(i,1));
 		serial_puts("\O/");
+		if (coordonnees_littlem(i,1)==tab_myspace[1]){
+			play=false;
+		}
 		}
 }

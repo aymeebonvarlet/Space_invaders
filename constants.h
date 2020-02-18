@@ -1,16 +1,14 @@
-
+#include <stdio.h>
 
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
 
-typedef struct tableau_death{
-	bool tab[10] = { true , true , true , true , true , true , true , true , true , true };
-}dead_bm;
 
-typedef struct tableau_death{
-	bool tab[10] = { true , true , true , true , true , true , true , true , true , true, true , true , true , true  };
-}dead_lm;
+bool tab_dbm[14] = { true , true ,true ,true ,true ,true ,true ,true ,true ,true,true ,true ,true ,true };
+bool tab_dlm[10] = { true , true ,true ,true ,true ,true ,true ,true ,true ,true };
+bool play = true;
+
 
 
 

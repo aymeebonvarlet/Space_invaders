@@ -9,7 +9,7 @@
 #include "constants.h"
 
 void shoot_myspace(){
-	carac = serial_get_last_char();
+	unsigned char carac = serial_get_last_char();
 	if (carac = ' ');
 		uint8_t x_shoot = myspace.tab[0] + 2 ; // pour que le tire débute au milieu du vasseau)
 		for (uint8_t  i = myspace.tab[1]+1 ; i > VT100_SCREEN_YMIN ; i-- ){

@@ -19,7 +19,7 @@ void moovemonsters(uint8_t time) // initialisé à 50
 }
 
 void moove_myspace() {
-	carac = serial_get_last_char();
+	unsigned char carac = serial_get_last_char();
 	if (carac == 'i') {
 		delete_myspace();
 		myspace(0 , 1);

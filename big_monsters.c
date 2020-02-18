@@ -14,15 +14,15 @@ uint8_t** coordonnees_bigm(uint8_t i,uint8_t coo ){
 		y+=3;
 	}
 	if (x<80){
-		bmonster.tab[i][0]=x;
-		bmonster.tab[i][1]=y;
+		tab_bigm[i][0]=x;
+		tab_bigm[i][1]=y;
 	}
 	else {
 		x += i*14 - 80; // max x= 80, on revient à la ligne
-		bmonster.tab[i][0]=x;
-		bmonster.tab[i][1]=y+3; //on ajoute 3 en y pour avoir une séparation
+		tab_bigm[i][0]=x;
+		tab_bigm[i][1]=y+3; //on ajoute 3 en y pour avoir une séparation
 	}
-	return bmonster.tab[i][coo];
+	return tab_bigm[i][coo];
 }
 
 void init_bigm(){
@@ -35,9 +35,13 @@ void init_bigm(){
 void changed_bm(uint8_t pas){
 	for (uint8_t i = 0 ; i<11 ; i++){
 		if (dead_bm.tab[i]){
-			bmonster.tab[i][0] += 1 ; // on ajoute un à la coordonnées en x
+			tab_bigm[i][0] += 1 ; // on ajoute un à la coordonnées en x
 			vt100_move(coordonnees_bigm(i,0),coordonnees_bigm(i,1));
 			serial_puts("|===O===|");
+			if (coordonnees_bigm(i,1)==tab_myspace[1]){
+				play=false;
+			}
+
 		}
 	}
 }
@@ -56,7 +60,6 @@ void delete_onebm(uint8_t id){
 	serial_puts("         ");
 }
 
-void monstre_dead
 
 
 

@@ -10,12 +10,11 @@
 
 #include <stdint.h>
 
-typedef struct tableau_x_y{
-	uint8_t tab[2];
-}myspace;
+
+uint8_t tab_myspace[2];
 
 void contour();
-void myspace(uint8_t x , uint8_t new_x);
+myspace(uint8_t x , uint8_t pas);
 void delete_myspace(uint8_t x , uint8_t new_x);
 void init_myspace();
 

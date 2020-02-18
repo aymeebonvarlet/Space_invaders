@@ -10,9 +10,7 @@
 
 
 // tab[numéro monstre][x,y]
-typedef struct tableau_x_y{
-	uint8_t tab[10][2];
-}bmonster;
+uint8_t tab_bigm[10][2];
 
 
 uint8_t** coordonnees_bigm(uint8_t i,uint8_t coo);
