@@ -34,10 +34,10 @@ bool get_lbm(uint8_t id)
 	return tab_dlittlem[id];
 }
 
-static uint8_t tab_shoot[2] =
-{ 0, 0 };
+static float tab_shoot[2] =
+{ 0.0, 0.0 };
 
-void set_shoot(uint8_t coo, uint8_t val)
+void set_shoot(uint8_t coo, float val)
 {
 	tab_shoot[coo] = val;
 }
@@ -54,40 +54,38 @@ void shoot_myspace(void)
 		set_shoot(0, get_myspace(0) + 2); //pour que le shoot parte du milieu de vaisseau
 		set_shoot(1, get_myspace(1));
 	}
-	vt100_move(get_shoot(0), get_shoot(1) - 1);
+	vt100_move(get_shoot(0), get_shoot(1) - 0.1);
 	serial_putchar('|');
-	sleep(10);
-	vt100_move(get_shoot(0), get_shoot(1) - 1);
-	serial_puts("  ");
-	sleep(10);
-	set_shoot(1, get_shoot(1) - 1);
+	sleep(2);
+	vt100_move(get_shoot(0), get_shoot(1) - 0.1);
+	serial_puts(" ");
+	set_shoot(1, get_shoot(1) - 0.1);
+	//réinitialise le x et y du shoot
 	if (get_shoot(1) == 2)
 	{
 		set_shoot(0, 0);
 		set_shoot(1, get_myspace(1));
 	}
-
-//	uint8_t x_shoot = get_shoot(0);
-//	for (uint8_t id_bm = 0; id_bm < 11; id_bm++)
-//	{
-//		uint8_t c = coordonnees_bigm(id_bm, get_shoot(0));
-//		if ((c >= x_shoot) && (x_shoot <= c + 8))
-//		{
-//			delete_onebm(id_bm);
-//			tab_dbigm[id_bm] = false;
-//			break;
-//		}
-//	}
-//	for (uint8_t id_lm = 0; id_lm < 11; id_lm++)
-//	{
-//		uint8_t c = coordonnees_littlem(id_lm, x_shoot);
-//		if ((c <= x_shoot) && (x_shoot <= c + 4))
-//		{
-//			delete_onelm(id_lm);
-//			tab_dlittlem[id_lm] = false;
-//			break;
-//		}
-//	}
+	// on regarde si le tir touche un BIG MONSTER
+	for (uint8_t i = 0; i < 10; i++)
+	{
+		//si x_bigm <= x_shoot <= x_bigm + 8 (8 etant la taille-1 du bigmonster) et y_shoot == y_bigm alors on tue le big monster
+		if ((get_bigm(i, 0) <= get_shoot(0))
+				&& ((get_bigm(i, 0) + 8) >= get_shoot(0))
+				&& get_shoot(1) == get_bigm(i, 1))
+		{
+			if (get_dbm(i) == false)
+			{
+				continue;
+			}
+			delete_onebm(i);
+			//si le big monster est tué on arrête le tir en réinitialisant les coordonnées du tir puisque c’est la condition dans le main
+			set_shoot(0, 0);
+			set_shoot(1, get_myspace(1));
+			// on ne peut tuer qu’un big monster à la fois du coup on sort de la boucle for
+			break;
+		}
+		}
 	}
 
 
