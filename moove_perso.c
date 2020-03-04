@@ -1,33 +1,27 @@
-#include <myspace.h>
+#include "myspace.h"
 #include "vt100.h"
 #include "timer.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "big_monsters.h"
 #include "little_monster.h"
+#include "serial.h"
 
-void moovemonsters(uint8_t time) // initialisé à 50
+//void moovemonsters(uint8_t time) // initialisé à 50
+//{
+//	uint8_t i = time;
+//	while (i<1000){
+//		sleep (time);
+//		delete_bm();
+////		delete_lm();
+//		changed_bm(1);
+////		changed_lm(1);
+//		i++;
+//	}
+//}
+
+void moove_bigm()
 {
-	uint8_t i = 1;
-	while (i==1){
-		sleep (time);
-		delete_bm();
-		delete_lm();
-		changed_bm(1);
-		changed_lm(1);
-	}
+
 }
 
-void moove_myspace() {
-	unsigned char carac = serial_get_last_char();
-	if (carac == 'i') {
-		delete_myspace();
-		myspace(0 , 1);
-	}
-	if (carac == 'a') {
-		delete_myspace();
-		myspace(0 , -1);
-	}
-}
 
 

@@ -1,63 +1,83 @@
 #include "vt100.h"
 #include "big_monsters.h"
 #include "constants.h"
+#include "serial.h"
+#include "myspace.h"
+#include "shoots.h"
+#include "timer.h"
+#include "constants.h"
 
+ // tab[numéro monstre][x,y]
+static uint8_t tab_bigm[10][2] =
+{
+{ 10, 3 },
+{	26,3},
+{	39,3},
+{	52,3},
+{	65,3},
+{ 10, 6 },
+{	26,6},
+{	39,6},
+{ 52, 6 },
+{ 65, 6 } };
 
-uint8_t** coordonnees_bigm(uint8_t i,uint8_t coo ){
-	x += i*14; //14 est la distance en x entre chaque big_monster
-	y=3; // on initialise y à 3
-	if (x==0){ //pour commencer après le contour
-		x=1;
-	}
-	if (x>(80-9)){  // 9 est la taille d’un big_monster, on souhaite tjrs que le monstre soit en entier
-		x=1;
-		y+=3;
-	}
-	if (x<80){
-		tab_bigm[i][0]=x;
-		tab_bigm[i][1]=y;
-	}
-	else {
-		x += i*14 - 80; // max x= 80, on revient à la ligne
-		tab_bigm[i][0]=x;
-		tab_bigm[i][1]=y+3; //on ajoute 3 en y pour avoir une séparation
-	}
-	return tab_bigm[i][coo];
+void set_bigm (uint8_t id, uint8_t xory , uint8_t new_val){
+	tab_bigm[id][xory]=new_val;
 }
 
-void init_bigm(){
+uint8_t get_bigm (uint8_t id, uint8_t xory){
+	return tab_bigm[id][xory];
+}
+
+
+void init_bigm(void)
+{
 	for (uint8_t i = 0 ; i<10 ; i++){
-		vt100_move(coordonnees_bigm(i,0),coordonnees_bigm(i,1));
+		vt100_move(get_bigm(i, 0), get_bigm(i, 1));
 		serial_puts("|===O===|");
 	}
 }
 
-void changed_bm(uint8_t pas){
-	for (uint8_t i = 0 ; i<11 ; i++){
-		if (dead_bm.tab[i]){
-			tab_bigm[i][0] += 1 ; // on ajoute un à la coordonnées en x
-			vt100_move(coordonnees_bigm(i,0),coordonnees_bigm(i,1));
+void moove_bm(uint8_t pas)
+{
+	for (uint8_t i = 0; i < 10; i++)
+	{
+		// on regarde si l'ennemi n’a pas été tué
+		if (get_dbm(i)){
+			// on efface l’ennemie précédent
+			vt100_move(get_bigm(i, 0), get_bigm(i, 1));
+			serial_puts("         ");
+			// on ajoute le pas à x_ennemi pour qu’il avance
+			set_bigm(i, 0, get_bigm(i, 0) + pas);
+			// on regarde si x_monster < 70 sinon on ajoute 3 à y_ennemi pour l’écrire sur la ligne suivante
+			if (get_bigm(i, 0) >= 70)
+			{
+				set_bigm(i, 1, get_bigm(i, 1) + 3);
+				set_bigm(i, 0, 1);
+			}
+
+			// on met le monstre avec les nouvelles coordonnées
+			vt100_move(get_bigm(i, 0), get_bigm(i, 1));
 			serial_puts("|===O===|");
-			if (coordonnees_bigm(i,1)==tab_myspace[1]){
-				play=false;
+			// si la nouvelle valeur y_ennemi ==  y_héro on arrête le jeu
+			if (get_bigm(i, 1) == get_bigm(i, 1))
+			{
+				set_play(false);
 			}
 
 		}
+	else
+	{
+	}
 	}
 }
 
-void delete_bm(){
-	for (uint8_t i = 0 ; i<10 ; i++){
-		if (dead_bm.tab[i]){
-			vt100_move(coordonnees_bigm(i,0)-1,coordonnees_bigm(i,1)); //on supprime le monstre d’avant
-			serial_puts("         ");
-		}
-	}
-}
+
 
 void delete_onebm(uint8_t id){
-	vt100_move(coordonnees_bigm(id,0),coordonnees_bigm(id,1)); //on supprime le monstre d’avant
+	vt100_move(get_bigm(id, 0), get_bigm(id, 1)); //on supprime le monstre
 	serial_puts("         ");
+	set_dbm(id, false);
 }
 
 

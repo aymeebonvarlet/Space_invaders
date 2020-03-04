@@ -1,36 +1,58 @@
-
 #include "vt100.h"
+#include "serial.h"
+#include "myspace.h"
 
-/* dans ce programme on va initialiser les positions des vaisseaux un à un afin de leurs rentrée des coordonnées d'origines et pouvoir els modifier
- au cours du temps grâce aux pointeurs. On choisit de mettre 10 gros monstres de taille 9, 14 petits monstres de taille 5. On va aussi créer une fonction
- delete qui permettrait d'effacer le vaisseau d'espace utiliser par le vaisseau précédent écrit*/
+static uint8_t tab_myspace[2] =
+{ }; // tab_myspace[0] = x ; tab_myspace[1] = y
 
-
-
-
-
-void myspace(uint8_t x , uint8_t pas){// = pernet de modifier la valeur en x du myspace
-	if (new_x == 0){ //attention au contour
-		new_x=1;
-	}
-	if (new_x == 80){
-		new_x = 79;
-	}
-	tab_myspace[x] =  tab_myspace[x] + pas ;
-	vt100_move( tab_myspace[x] , tab_myspace[1] );
-	serial_puts("(-O-)");
+void set_myspace(uint8_t val, uint8_t coo)
+{
+	tab_myspace[coo] = val;
 }
 
-void delete_myspace(){ // permet de supprimer l’ancien myspace
-	vt100_move( tab_myspace[x] -1 , tab_myspace[1] );
-	serial_puts("     ");
+uint8_t get_myspace(uint8_t coo)
+{
+	return tab_myspace[coo];
 }
 
-void init_myspace(){
+void moove_myspace(void)
+{ // = pernet de modifier la valeur en x du myspace
+	signed char carac = serial_get_last_char();
+	uint8_t pas = 0;
+	uint8_t x = get_myspace(0);
+	if (x < 75 && carac == 'i')
+	{
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("     ");
+		pas = 1;
+		uint8_t new_x = get_myspace(0) + pas;
+		set_myspace(new_x, 0); // on modifie la nouvelle valeur de x
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("(-O-)");
+	}
+	else if (x > 2 && carac == 'a')
+	{
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("     ");
+		pas = -1;
+		uint8_t new_x = get_myspace(0) + pas;
+		set_myspace(new_x, 0); // on modifie la nouvelle valeur de x
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("(-O-)");
 
-	myspace.tab[0]= (VT100_SCREEN_XMIN+VT100_SCREEN_XMAX)/2 ;
-	myspace.tab[1]= VT100_SCREEN_YMAX - 4 ;
-	vt100_move( tab_myspace[0] , tab_myspace[1] );
+	}
+	else
+	{
+		// nothing todo
+	}
+	}
+
+
+void init_myspace(void)
+{
+	set_myspace((VT100_SCREEN_XMIN + VT100_SCREEN_XMAX) / 2, 0);
+	set_myspace(VT100_SCREEN_YMAX - 3, 1);
+	vt100_move(get_myspace(0), get_myspace(1));
 	serial_puts("(-O-)");
 
 }

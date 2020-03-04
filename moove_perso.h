@@ -8,8 +8,7 @@
 #ifndef MOOVE_PERSO_H_
 #define MOOVE_PERSO_H_
 
-void moovemonsters();
-void moove_myspace();
+//void moovemonsters(uint8_t time);
 
 
 

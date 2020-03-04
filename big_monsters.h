@@ -9,14 +9,11 @@
 #define BIG_MONSTERS_H_
 
 
-// tab[numéro monstre][x,y]
-uint8_t tab_bigm[10][2];
 
-
-uint8_t** coordonnees_bigm(uint8_t i,uint8_t coo);
-void init_bigm();
-
-void changed_bm(pas);
+void init_bigm(void);
+void set_bigm(uint8_t id, uint8_t xory, uint8_t new_val);
+uint8_t get_bigm(uint8_t id, uint8_t xory);
+void moove_bm(uint8_t pas);
 void delete_onebm(uint8_t id);
-void delete_bm();
+void delete_bm(void);
 #endif /* BIG_MONSTERS_H_ */

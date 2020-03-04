@@ -1,6 +1,7 @@
 #include "vt100.h"
 #include "big_monsters.h"
 #include "constants.h"
+#include "serial.h"
 
 
 void contour()
