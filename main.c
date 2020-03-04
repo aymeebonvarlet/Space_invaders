@@ -16,31 +16,39 @@ int main(void)
 	init_bigm();
 //	init_littlem();
 	init_myspace();
-
+	//timer pour que les monstres avance
+	uint8_t time_to_moove_monster = 1;
+	uint8_t tirer_au_moins_une_fois = 0;
 	while (get_play())
 	{
-		moove_myspace();
+		signed char carac = serial_get_last_char();
+		moove_myspace(carac);
 
-		sleep(10);
-		uint8_t time_to_moove_monster = 0;
-		if (time_to_moove_monster % 10)
+		sleep(2);
+		if (time_to_moove_monster % 150 == 0)
 		{
-			moove_bm(2);
+			moove_bm(1);
 		}
 
-		signed char carac = serial_get_last_char();
+
 		if (carac == ' ')
 		{
 			shoot_myspace();
+			tirer_au_moins_une_fois = 1;
 		}
-		if (get_shoot(1) < get_myspace(1))
+
+		if (get_shoot(1) < get_myspace(1) && tirer_au_moins_une_fois)
 		{
 			shoot_myspace();
 		}
-//		time_to_moove_monster++;
+		time_to_moove_monster++;
 
 	}
+	while (1)
+	{
+	}
 }
+
 
 void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size)
 {
