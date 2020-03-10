@@ -9,6 +9,8 @@
 #define MENU_H_
 
 void planet(void);
+void message(void);
+void menu(void);
 
 
 #endif /* MENU_H_ */
