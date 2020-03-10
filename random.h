@@ -1,13 +1,10 @@
-/*
- * random.h
- *
- *  Created on: 10 mars 2020
- *      Author: bonvarlet
- */
+#include "vt100.h"
+#include "serial.h"
 
 #ifndef RANDOM_H_
 #define RANDOM_H_
 
-uint8_t rand(uint8_t a, uint8_t b, uin8_t m);
+uint8_t rand(void);
+uint8_t get_p_nbre(void);
 
 #endif /* RANDOM_H_ */
