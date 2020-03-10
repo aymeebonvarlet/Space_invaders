@@ -12,4 +12,12 @@ void shoot_myspace(void);
 
 void set_shoot(uint8_t coo, float val);
 uint8_t get_shoot(uint8_t coo);
+
+
+void set_shootbm(uint8_t coo, float val);
+uint8_t get_shootbm(uint8_t coo);
+void shoot_bigmonster(uint8_t id_bigm);
+
+void set_p_id_random(uint8_t new);
+uint8_t get_p_id_random(void);
 #endif /* SHOOTS_H_ */

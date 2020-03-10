@@ -7,7 +7,9 @@
 #include "constants.h"
 #include "serial.h"
 #include "shoots.h"
+#include "random.h"
 
+//les monstres
 static bool tab_dbigm[14] =
 { true, true, true, true, true, true, true, true, true, true, true, true, true,
 true }; //true = big monster vivant
@@ -33,6 +35,7 @@ bool get_lbm(uint8_t id)
 {
 	return tab_dlittlem[id];
 }
+//le shoot du vaisseau
 
 static float tab_shoot[2] =
 { 0.0, 0.0 };
@@ -45,6 +48,36 @@ void set_shoot(uint8_t coo, float val)
 uint8_t get_shoot(uint8_t coo)
 {
 	return tab_shoot[coo];
+}
+
+//les shoots des monstres
+
+static float tab_shootbm[2] =
+{ 0.0, 0.0 };
+
+void set_shootbm(uint8_t coo, float val)
+{
+	tab_shootbm[coo] = val;
+}
+
+uint8_t get_shootbm(uint8_t coo)
+{
+	return tab_shootbm[coo];
+}
+
+//la vie de mon vaisseau
+static uint8_t life_myspace = 3;
+
+//on créait un pointeur pour trouver l’id random du big_m qui tire
+static uint8_t variable=0;
+static uint8_t *p_id_ramdom=&variable;
+
+uint8_t get_p_id_random(void){
+	return *p_id_ramdom;
+}
+
+void set_p_id_random(uint8_t new){
+	*p_id_ramdom=new;
 }
 
 //fonction qui fait tirer mon héro
@@ -87,11 +120,60 @@ void shoot_myspace(void)
 			// on ne peut tuer qu’un big monster à la fois du coup on sort de la boucle for
 			break;
 		}
+	}
+}
+//fonction qui fait tirer au hasard un des bigmonster vivants
+void shoot_bigmonster(uint8_t id_bigm)
+{
+
+	//on vérifie que le monstre est encore vivant sinon en relance la fonction
+	while (!tab_dbigm[id_bigm])
+	{
+		set_p_id_random(rand() % 10);
+		id_bigm=get_p_id_random();
+
+	}
+
+	//on initialise le shoot
+	if (get_shootbm(0) == 0)
+	{
+		set_shootbm(0, get_bigm(id_bigm, 0) + 4); // + 4 pour que le shoot parte au milieu du monstre
+		set_shootbm(1, get_bigm(id_bigm, 1) + 1);
+	}
+
+	set_shootbm(1, get_shootbm(1) + 1);
+	for (uint8_t i=0; i < 10; i++)
+	{
+		if (get_shootbm(1) == get_bigm(i, 1) && get_shootbm(0) >= get_bigm(i, 0)
+				&& get_shootbm(0) <= (get_bigm(i, 0) + 8) && tab_dbigm[i]==true)
+		{
+			set_shootbm(1, get_shootbm(1) + 1);
 		}
 	}
-//fonction qui fait tirer au hasard un des bigmonster vivants
-void shoot_bigmonster(void){
+	vt100_move(get_shootbm(0), get_shootbm(1));
+	serial_putchar('|');
+	sleep(2);
+	vt100_move(get_shootbm(0), get_shootbm(1));
+	serial_puts(" ");
+	//on vérifie de ne pas écrater un bigmonster
 
+
+	//réinitialise le x et y du shoot à la fin
+	if (get_shootbm(1) == 23)
+	{
+		set_shootbm(0, 0);
+		set_shootbm(1, get_bigm(id_bigm, 1));
+	}
+	//si le shoot a touché notre vaisseau
+	if (get_shootbm(1) == get_myspace(1) && get_shootbm(0) >= get_myspace(0)
+			&& get_shootbm(0) <= (get_myspace(0) + 4))
+	{
+		death_myspace();
+		life_myspace -= 1;
+		if (life_myspace == 0)
+		{
+			set_play(false);
+		}
+	}
 }
-
 
