@@ -46,6 +46,8 @@ uint8_t get_shoot(uint8_t coo)
 {
 	return tab_shoot[coo];
 }
+
+//fonction qui fait tirer mon héro
 void shoot_myspace(void)
 {
 
@@ -87,5 +89,9 @@ void shoot_myspace(void)
 		}
 		}
 	}
+//fonction qui fait tirer au hasard un des bigmonster vivants
+void shoot_bigmonster(void){
+
+}
 
 
