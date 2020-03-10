@@ -1,6 +1,7 @@
 #include "vt100.h"
 #include "serial.h"
 #include "myspace.h"
+#include "timer.h"
 
 static uint8_t tab_myspace[2] =
 { }; // tab_myspace[0] = x ; tab_myspace[1] = y
@@ -15,9 +16,8 @@ uint8_t get_myspace(uint8_t coo)
 	return tab_myspace[coo];
 }
 
-void moove_myspace(void)
+void moove_myspace(signed char carac)
 { // = pernet de modifier la valeur en x du myspace
-	signed char carac = serial_get_last_char();
 	uint8_t pas = 0;
 	uint8_t x = get_myspace(0);
 	if (x < 75 && carac == 'i')
@@ -41,10 +41,8 @@ void moove_myspace(void)
 		serial_puts("(-O-)");
 
 	}
-	else
-	{
-		// nothing todo
-	}
+	sleep(2);
+
 	}
 
 
@@ -54,6 +52,10 @@ void init_myspace(void)
 	set_myspace(VT100_SCREEN_YMAX - 3, 1);
 	vt100_move(get_myspace(0), get_myspace(1));
 	serial_puts("(-O-)");
+
+}
+
+void death_mysace(void){
 
 }
 

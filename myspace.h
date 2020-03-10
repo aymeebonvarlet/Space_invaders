@@ -9,7 +9,7 @@
 void set_myspace(uint8_t val, uint8_t coo);
 uint8_t get_myspace(uint8_t coo);
 
-void moove_myspace(void);
+void moove_myspace(signed char carac);
 void init_myspace(void);
 
 
