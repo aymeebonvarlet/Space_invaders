@@ -55,7 +55,16 @@ void init_myspace(void)
 
 }
 
-void death_mysace(void){
-
+void death_myspace(void){
+	uint8_t i = 3;
+	while (i>0){
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("     ");
+		sleep(30);
+		vt100_move(get_myspace(0), get_myspace(1));
+		serial_puts("(-O-)");
+		sleep(30);
+		i--;
+	}
 }
 

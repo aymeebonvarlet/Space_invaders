@@ -22,13 +22,13 @@ void planet(void)
 }
 
 void message(void){
-	vt100_move(27, 9);
-	serial_puts("BIENVENUE DANS SPACE_INVADERS");
-	vt100_move(20, 12);
-	serial_puts("Appuyez sur entrée pour commencer la partie");
+	vt100_move(29, 9);
+	serial_puts("WELCOME TO SPACE_INVADERS");
+	vt100_move(22, 12);
+	serial_puts("Press the space key to start the game");
 	sleep(24);
-	vt100_move(20, 12);
-	serial_puts("                                           ");
+	vt100_move(22, 12);
+	serial_puts("                                        ");
 	sleep(24);
 }
 

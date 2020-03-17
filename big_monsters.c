@@ -39,7 +39,7 @@ void init_bigm(void)
 }
 
 void moove_bm(uint8_t pas)
-{
+{	//boucle for pour faire bouger les 10 monstre en même temps
 	for (uint8_t i = 0; i < 10; i++)
 	{
 		// on regarde si l'ennemi n’a pas été tué
@@ -53,28 +53,36 @@ void moove_bm(uint8_t pas)
 			if (get_bigm(i, 0) >= 70)
 			{
 				set_bigm(i, 1, get_bigm(i, 1) + 3);
-				set_bigm(i, 0, 1);
+				set_bigm(i, 0, 2);
 			}
 
 			// on met le monstre avec les nouvelles coordonnées
 			vt100_move(get_bigm(i, 0), get_bigm(i, 1));
 			serial_puts("|===O===|");
 			// si la nouvelle valeur y_ennemi ==  y_héro on arrête le jeu
-			if (get_bigm(i, 1) == get_bigm(i, 1))
+			if (get_bigm(i, 1) == get_myspace(1))
 			{
 				set_play(false);
 			}
-
-		}
+		else
+		{}
+	}
+		//on efface les big_monster morts
 	else
 	{
+		vt100_move(get_bigm(i, 0), get_bigm(i, 1));
+		serial_puts("         ");
 	}
+
 	}
 }
 
 
 
 void delete_onebm(uint8_t id){
+	vt100_move(get_bigm(id, 0), get_bigm(id, 1));
+	serial_puts("#########");
+	sleep(2);
 	vt100_move(get_bigm(id, 0), get_bigm(id, 1)); //on supprime le monstre
 	serial_puts("         ");
 	set_dbm(id, false);

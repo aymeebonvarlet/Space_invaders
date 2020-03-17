@@ -7,12 +7,13 @@
 #include <stdbool.h>
 #include "constants.h"
 
-static bool play = true;
+static bool play = false;
 
 
 void set_play(bool new)
 {
 	play = new;
+
 }
 bool get_play(void)
 {

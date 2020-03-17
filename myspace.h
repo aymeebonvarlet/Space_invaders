@@ -11,6 +11,7 @@ uint8_t get_myspace(uint8_t coo);
 
 void moove_myspace(signed char carac);
 void init_myspace(void);
+void death_myspace(void);
 
 
 #endif /* MYSPACE_H_ */

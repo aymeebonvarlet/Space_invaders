@@ -8,47 +8,115 @@
 #include "shoots.h"
 #include "constants.h"
 #include "timer.h"
+#include "menu.h"
+#include "random.h"
+#include "scores.h"
+#include "lost.h"
+#include "win.h"
+#include "init.h"
+
+//timer pour que les monstres avance
+static uint8_t time_to_moove_monster = 1;
+static uint8_t first_shoot_myspace = 0;
+static uint8_t time_shoot_bigm = 1;
 
 int main(void)
+
 {
 
-	contour();
-	init_bigm();
-//	init_littlem();
-	init_myspace();
-	//timer pour que les monstres avance
-	uint8_t time_to_moove_monster = 1;
-	uint8_t tirer_au_moins_une_fois = 0;
-	while (get_play())
+	serial_init(115200);
+	vt100_clear_screen();
+
+	//on affiche le menu et ses extensions, le play est initialisé à false
+	while (!get_play())
 	{
 		signed char carac = serial_get_last_char();
-		moove_myspace(carac);
-
-		sleep(2);
-		if (time_to_moove_monster % 150 == 0)
-		{
-			moove_bm(1);
-		}
-
-
+		menu();
 		if (carac == ' ')
 		{
-			shoot_myspace();
-			tirer_au_moins_une_fois = 1;
+			set_play(true);
+			vt100_clear_screen();
 		}
+	}
+	init();
 
-		if (get_shoot(1) < get_myspace(1) && tirer_au_moins_une_fois)
+	while (1)
+	{
+		while (get_play())
 		{
-			shoot_myspace();
+			display_life();
+			signed char carac = serial_get_last_char();
+			moove_myspace(carac);
+
+			sleep(2);
+			//on fait bouger les monstres
+			if (time_to_moove_monster % 100 == 0)
+			{
+				moove_bm(1);
+			}
+			//les big monster shoot
+			if (time_shoot_bigm % 25 == 0)
+			{
+				set_p_id_random(rand() % 10);
+				shoot_bigmonster(get_p_id_random());
+			}
+			if (get_shootbm(1) > get_bigm(get_p_id_random(), 1))
+			{
+				shoot_bigmonster(get_p_id_random());
+			}
+
+			if (carac == ' ')
+			{
+				shoot_myspace();
+				first_shoot_myspace = 1;
+			}
+
+			if (get_shoot(1) < get_myspace(1) && first_shoot_myspace)
+			{
+				shoot_myspace();
+			}
+			time_to_moove_monster++;
+			time_shoot_bigm++;
+
+			if (get_nb_kill_bm() == 10)
+			{
+				set_play(false);
+			}
 		}
-		time_to_moove_monster++;
+		vt100_clear_screen();
+
+
+		while (!get_play())
+		{
+			signed char carac = serial_get_last_char();
+			if (get_nb_kill_bm() == 10)
+			{
+				win();
+			}
+			else
+			{
+				lost();
+			}
+
+			if (carac == ' ')
+			{
+				set_play(true);
+				vt100_clear_screen();
+				init();
+				init_lifes();
+
+				time_to_moove_monster = 1;
+				first_shoot_myspace = 0;
+				time_shoot_bigm = 1;
+			}
+		}
 
 	}
+
 	while (1)
 	{
 	}
 }
-
 
 void EVAL_AUDIO_TransferComplete_CallBack(uint32_t pBuffer, uint32_t Size)
 {

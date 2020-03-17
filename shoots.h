@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include "serial.h"
+#include "vt100.h"
 
 #ifndef SHOOTS_H_
 #define SHOOTS_H_
@@ -20,4 +22,7 @@ void shoot_bigmonster(uint8_t id_bigm);
 
 void set_p_id_random(uint8_t new);
 uint8_t get_p_id_random(void);
+
+void set_nb_kill_bm(uint8_t val);
+uint8_t get_nb_kill_bm(void);
 #endif /* SHOOTS_H_ */

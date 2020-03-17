@@ -6,8 +6,7 @@
 
 void contour()
 {
-	serial_init(115200);
-	vt100_clear_screen();
+
 	for (uint8_t i = 1; i < 81; i++)
 	{
 		vt100_move(i, VT100_SCREEN_YMIN);

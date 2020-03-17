@@ -6,8 +6,8 @@
 #include "moove_perso.h"
 #include "constants.h"
 #include "serial.h"
-#include "shoots.h"
 #include "random.h"
+#include "scores.h"
 
 //les monstres
 static bool tab_dbigm[14] =
@@ -65,8 +65,21 @@ uint8_t get_shootbm(uint8_t coo)
 	return tab_shootbm[coo];
 }
 
-//la vie de mon vaisseau
-static uint8_t life_myspace = 3;
+//pour vour si tous les bm sont morts on créer la fonction nb modifiable que dans ce fichier
+
+static uint8_t nb_kill_bm = 0;
+
+void set_nb_kill_bm(uint8_t val){
+	nb_kill_bm=val;
+}
+
+uint8_t get_nb_kill_bm(void){
+	return nb_kill_bm;
+}
+
+
+
+
 
 //on créait un pointeur pour trouver l’id random du big_m qui tire
 static uint8_t variable=0;
@@ -89,12 +102,12 @@ void shoot_myspace(void)
 		set_shoot(0, get_myspace(0) + 2); //pour que le shoot parte du milieu de vaisseau
 		set_shoot(1, get_myspace(1));
 	}
-	vt100_move(get_shoot(0), get_shoot(1) - 0.1);
+	set_shoot(1, get_shoot(1) - 1);
+	vt100_move(get_shoot(0), get_shoot(1));
 	serial_putchar('|');
 	sleep(2);
-	vt100_move(get_shoot(0), get_shoot(1) - 0.1);
+	vt100_move(get_shoot(0), get_shoot(1));
 	serial_puts(" ");
-	set_shoot(1, get_shoot(1) - 0.1);
 	//réinitialise le x et y du shoot
 	if (get_shoot(1) == 2)
 	{
@@ -109,10 +122,13 @@ void shoot_myspace(void)
 				&& ((get_bigm(i, 0) + 8) >= get_shoot(0))
 				&& get_shoot(1) == get_bigm(i, 1))
 		{
+
 			if (get_dbm(i) == false)
 			{
+
 				continue;
 			}
+			set_nb_kill_bm(get_nb_kill_bm()+1);
 			delete_onebm(i);
 			//si le big monster est tué on arrête le tir en réinitialisant les coordonnées du tir puisque c’est la condition dans le main
 			set_shoot(0, 0);
@@ -169,11 +185,13 @@ void shoot_bigmonster(uint8_t id_bigm)
 			&& get_shootbm(0) <= (get_myspace(0) + 4))
 	{
 		death_myspace();
-		life_myspace -= 1;
-		if (life_myspace == 0)
+		set_life_myspace(-1);
+		if (get_life_myspace() == 0)
 		{
 			set_play(false);
 		}
 	}
 }
+
+
 
