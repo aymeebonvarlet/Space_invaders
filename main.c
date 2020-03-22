@@ -45,19 +45,20 @@ int main(void)
 		while (get_play())
 		{
 			display_life();
+			display_score();
 			signed char carac = serial_get_last_char();
 			moove_myspace(carac);
 
 			sleep(2);
 			//on fait bouger les monstres
-			if (time_to_moove_monster % 100 == 0)
+			if (time_to_moove_monster % 20 == 0)
 			{
 				moove_bm(1);
 			}
 			//les big monster shoot
-			if (time_shoot_bigm % 25 == 0)
+			if (time_shoot_bigm % 100 == 0)
 			{
-				set_p_id_random(rand() % 10);
+				set_p_id_random(rand() % 40);
 				shoot_bigmonster(get_p_id_random());
 			}
 			if (get_shootbm(1) > get_bigm(get_p_id_random(), 1))
@@ -88,7 +89,6 @@ int main(void)
 
 		while (!get_play())
 		{
-			signed char carac = serial_get_last_char();
 			if (get_nb_kill_bm() == 10)
 			{
 				win();
@@ -96,18 +96,6 @@ int main(void)
 			else
 			{
 				lost();
-			}
-
-			if (carac == ' ')
-			{
-				set_play(true);
-				vt100_clear_screen();
-				init();
-				init_lifes();
-
-				time_to_moove_monster = 1;
-				first_shoot_myspace = 0;
-				time_shoot_bigm = 1;
 			}
 		}
 

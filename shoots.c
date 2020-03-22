@@ -130,6 +130,7 @@ void shoot_myspace(void)
 			}
 			set_nb_kill_bm(get_nb_kill_bm()+1);
 			delete_onebm(i);
+			set_score(1);
 			//si le big monster est tué on arrête le tir en réinitialisant les coordonnées du tir puisque c’est la condition dans le main
 			set_shoot(0, 0);
 			set_shoot(1, get_myspace(1));
