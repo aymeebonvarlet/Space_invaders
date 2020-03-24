@@ -16,6 +16,8 @@ uint8_t get_myspace(uint8_t coo)
 	return tab_myspace[coo];
 }
 
+//fonction permettant de faire bouger mon vaisseau
+
 void moove_myspace(signed char carac)
 { // = pernet de modifier la valeur en x du myspace
 	uint8_t pas = 0;
@@ -45,7 +47,7 @@ void moove_myspace(signed char carac)
 
 	}
 
-
+//initialiser mon vaisseau
 void init_myspace(void)
 {
 	set_myspace((VT100_SCREEN_XMIN + VT100_SCREEN_XMAX) / 2, 0);
@@ -55,6 +57,7 @@ void init_myspace(void)
 
 }
 
+//quand mon vaisseau est touché par le big_m
 void death_myspace(void){
 	uint8_t i = 3;
 	while (i>0){

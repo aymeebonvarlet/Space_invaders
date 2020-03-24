@@ -2,7 +2,6 @@
 #include "vt100.h"
 #include "timer.h"
 #include "big_monsters.h"
-#include "little_monster.h"
 #include "serial.h"
 
 //void moovemonsters(uint8_t time) // initialisé à 50

@@ -2,7 +2,6 @@
 #include "vt100.h"
 #include "timer.h"
 #include "big_monsters.h"
-#include "little_monster.h"
 #include "moove_perso.h"
 #include "constants.h"
 #include "serial.h"
@@ -13,9 +12,9 @@
 static bool tab_dbigm[14] =
 { true, true, true, true, true, true, true, true, true, true, true, true, true,
 true }; //true = big monster vivant
-static bool tab_dlittlem[10] =
-{ true, true, true, true, true, true, true, true, true, true }; //false = little monster mort
 
+
+//gettes et setter de la mort des big_m
 void set_dbm(uint8_t id, bool val)
 {
 	tab_dbigm[id] = val;
@@ -26,15 +25,7 @@ bool get_dbm(uint8_t id)
 	return tab_dbigm[id];
 }
 
-void set_lbm(uint8_t id, bool val)
-{
-	tab_dlittlem[id] = val;
-}
 
-bool get_lbm(uint8_t id)
-{
-	return tab_dlittlem[id];
-}
 //le shoot du vaisseau
 
 static float tab_shoot[2] =
